@@ -80,11 +80,16 @@ const Home: FC<Props> = (props) => {
 
   return (
     <Flex direction="column" alignItems="center" gap={10}>
-      <Heading as="h1">
-        <Emoji emoji=":hand:" size={28} /> Welcome to Planning Poker <Emoji emoji=":black_joker:" size={28} />
+      <Heading as="h1" display="flex" alignItems="center" textAlign={{ base: 'center', md: 'left' }}>
+        <Emoji emoji=":hand:" size={28} />{' '}
+        <Flex direction={{ base: 'column', md: 'row' }} gap={{ base: 0, md: 2 }}>
+          <Flex justifyContent="center">Welcome to</Flex>
+          <Flex justifyContent="center">Planning Poker</Flex>
+        </Flex>{' '}
+        <Emoji emoji=":black_joker:" size={28} />
       </Heading>
 
-      <Flex gap={10}>
+      <Flex gap={10} direction={{ base: 'column', md: 'row' }}>
         <form onSubmit={onSubmit}>
           <Flex direction="column" gap={6}>
             <Heading as="h2" fontSize="2xl">
@@ -104,7 +109,7 @@ const Home: FC<Props> = (props) => {
           </Flex>
         </form>
 
-        <Box borderLeft="1px" borderColor={bg.border} paddingLeft={10}>
+        <Box borderLeft={{ base: '0', md: '1px' }} borderColor={bg.border} paddingLeft={{ base: 0, md: 10 }}>
           <form>
             <Flex direction="column" gap={6}>
               <Heading as="h2" fontSize="2xl">

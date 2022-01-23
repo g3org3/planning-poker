@@ -10,6 +10,7 @@ import {
   MenuItem,
   MenuList,
   useColorModeValue,
+  useMediaQuery,
 } from '@chakra-ui/react'
 import { Link as ReachLink, useNavigate, WindowLocation } from '@reach/router'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -37,6 +38,7 @@ interface Props {
 
 const Layout: React.FC<Props> = ({ homeUrl, children, title, by, menuItems, location }) => {
   const navigate = useNavigate()
+  const [isDesktop] = useMediaQuery('(min-width: 768px)')
   const { currentUser, logout } = useAuth()
   const bg = {
     navbar: useColorModeValue('teal.300', 'teal.500'),
@@ -91,7 +93,12 @@ const Layout: React.FC<Props> = ({ homeUrl, children, title, by, menuItems, loca
               <motion.div whileHover={{ scale: 1.2 }}>
                 <Link as={ReachLink} to={homeUrl || '/'}>
                   <Heading as="h1" size="md" display="flex" alignItems="center">
-                    {title}{' '}
+                    {isDesktop
+                      ? title
+                      : title
+                          .split(' ')
+                          .map((t) => t.substring(0, 1))
+                          .join('')}{' '}
                     {by ? (
                       <>
                         <FiX size={13} /> {currentUser?.displayName || by}

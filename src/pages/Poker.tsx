@@ -157,7 +157,8 @@ const Poker: FC<Props> = ({ roomId, location }) => {
           bg="blue.100"
           direction="column"
           color="blue.500"
-          width="400px"
+          width={{ base: 'unset', md: '400px' }}
+          minWidth={{ base: '300px', md: 'unset' }}
           height="160px"
           alignItems="center"
           justifyContent="center"
@@ -171,7 +172,7 @@ const Poker: FC<Props> = ({ roomId, location }) => {
           </Button>
         </Flex>
         {!votes.length && <Flex height="92px" width="120px"></Flex>}
-        <Flex gap={4}>
+        <Flex gap={4} overflow={{ base: 'auto', md: 'unset' }}>
           {votes.map((vote) => (
             <Flex key={vote.id} direction="column" alignItems="center" gap={2}>
               <Card points={vote.points} hidden={isHidden} />
@@ -180,7 +181,13 @@ const Poker: FC<Props> = ({ roomId, location }) => {
           ))}
         </Flex>
       </Flex>
-      <Flex gap={4} justifyContent="center">
+      <Flex
+        gap={4}
+        alignItems="flex-end"
+        justifyContent={{ base: 'flex-start', md: 'center' }}
+        overflow={{ base: 'auto', md: 'unset' }}
+        height="120px"
+      >
         {room?.votingSystem.map((card) => (
           <Card
             key={card}
@@ -190,7 +197,7 @@ const Poker: FC<Props> = ({ roomId, location }) => {
           />
         ))}
       </Flex>
-      <Flex p={2} fontFamily="monospace" fontSize={16} gap={4}>
+      <Flex p={2} fontFamily="monospace" fontSize={16} gap={4} overflow={{ base: 'auto', md: 'unset' }}>
         Connected:{' '}
         {room?.users?.map((u, i) => (
           <Flex alignItems="center" key={u.id} gap={2}>
