@@ -1,16 +1,17 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from 'firebase/app'
+import { getAnalytics } from 'firebase/analytics'
+import { FirebaseOptions, initializeApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
 import {
-  getDatabase,
-  onValue,
-  ref,
-  set,
-  push,
-  remove,
-  onDisconnect,
-  ThenableReference,
   DataSnapshot,
+  getDatabase,
+  onDisconnect,
+  onValue,
+  push,
+  ref,
+  remove,
+  set,
+  ThenableReference,
 } from 'firebase/database'
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -18,7 +19,7 @@ import {
 const id = process.env.REACT_APP_FIREBASE_PROJECT_ID
 
 // Your web app's Firebase configuration
-const firebaseConfig = {
+const firebaseConfig: FirebaseOptions = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: `${id}.firebaseapp.com`,
   databaseURL: `https://${id}-default-rtdb.firebaseio.com`,
@@ -26,12 +27,14 @@ const firebaseConfig = {
   storageBucket: `${id}.appspot.com`,
   messagingSenderId: process.env.REACT_APP_FIREBASE_SENDER_ID,
   appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_FIREBASE_GA_ID,
 }
 
 // Initialize Firebase
 // const apps = getApps();
 const app = initializeApp(firebaseConfig)
 
+export const analytics = getAnalytics(app)
 export const db = getDatabase(app)
 export const auth = getAuth(app)
 
