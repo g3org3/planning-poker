@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Heading, Text, useColorModeValue } from '@chakra-ui/react'
+import { Box, Button, Flex, Heading, Text } from '@chakra-ui/react'
 import { useNavigate, WindowLocation } from '@reach/router'
 import { Emoji } from 'emoji-mart'
 import { FC, useEffect } from 'react'
@@ -63,7 +63,7 @@ const Poker: FC<Props> = ({ roomId, location }) => {
   const dispatch = useDispatch()
   const { currentUser, initialLoading } = useAuth()
   const userDetails = useGetUserDetails(currentUser)
-  const bg = { footer: useColorModeValue('teal.100', 'blue.600') }
+  // const bg = { footer: useColorModeValue('teal.100', 'blue.600') }
   const room = useGetRoom(roomId)
 
   useEffect(() => {
