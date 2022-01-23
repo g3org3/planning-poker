@@ -197,11 +197,17 @@ const Poker: FC<Props> = ({ roomId, location }) => {
           />
         ))}
       </Flex>
-      <Flex p={2} fontFamily="monospace" fontSize={16} gap={4} overflow={{ base: 'auto', md: 'unset' }}>
-        Connected:{' '}
+      <Flex
+        p={2}
+        fontFamily="monospace"
+        height="30px"
+        fontSize={16}
+        gap={4}
+        overflow={{ base: 'auto', md: 'unset' }}
+      >
         {room?.users?.map((u, i) => (
           <Flex alignItems="center" key={u.id} gap={2}>
-            {u.displayName}{' '}
+            <pre>{u.displayName} </pre>
             <Box
               bg={u.connected ? 'green.300' : 'tomato'}
               display="inline-block"
