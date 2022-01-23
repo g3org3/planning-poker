@@ -67,6 +67,7 @@ const Home: FC<Props> = (props) => {
       const { key } = dbPush('/poker/rooms/', payload)
       if (key) {
         dbSet(`/poker/rooms/${key}/`, 'id', key)
+        dbSet(`/poker/rooms/${key}/issues/AF1`, 'isHidden', true)
         dbSet(`/poker/roomNames/`, key, name)
       }
       setName('')
