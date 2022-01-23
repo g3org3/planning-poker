@@ -28,8 +28,9 @@ export type Room = {
   votingSystem: Array<string>
 }
 
-const vs = {
+export const vs = {
   fib: ['0', '1', '2', '5', '8', '13', '21', '?'],
+  custom: ['0', '0.5', '1', '1.5', '2', '2.5', '3', '3.5', '4', '5'],
 }
 
 export const useGetRoom = (roomId?: string | null) => {

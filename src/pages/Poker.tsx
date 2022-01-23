@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Heading, Text } from '@chakra-ui/react'
+import { Box, Button, Code, Flex, Heading, Text } from '@chakra-ui/react'
 import { useNavigate, WindowLocation } from '@reach/router'
 import { Emoji } from 'emoji-mart'
 import { FC, useEffect } from 'react'
@@ -53,7 +53,16 @@ const Card: FC<CardProps> = ({ points, onClick, isActive, hidden, ...props }) =>
       >
         {!hidden && <Text>{points}</Text>}
       </Flex>
-      {isActive && <Text color="blue.600">picked</Text>}
+      {typeof onClick === 'function' && (
+        <Text
+          transition="140ms"
+          color={isActive ? 'blue.600' : 'transparent'}
+          fontWeight="bold"
+          height="30px"
+        >
+          picked
+        </Text>
+      )}
     </Flex>
   )
 }
@@ -148,23 +157,25 @@ const Poker: FC<Props> = ({ roomId, location }) => {
           bg="blue.100"
           direction="column"
           color="blue.500"
-          p={10}
-          pl={20}
-          pr={20}
+          width="400px"
+          height="160px"
+          alignItems="center"
+          justifyContent="center"
           borderRadius="20px"
           fontSize={32}
           gap={4}
         >
-          Pick your cards!
+          {votes.length === 0 ? 'Pick your cards!' : 'Ready?'}
           <Button colorScheme="blue" onClick={onClickReveal}>
             {isHidden ? 'Reveal' : 'Hide'} votes
           </Button>
         </Flex>
+        {!votes.length && <Flex height="92px" width="120px"></Flex>}
         <Flex gap={4}>
           {votes.map((vote) => (
-            <Flex key={vote.id} direction="column" alignItems="center">
+            <Flex key={vote.id} direction="column" alignItems="center" gap={2}>
               <Card points={vote.points} hidden={isHidden} />
-              {vote.displayName}
+              <Code>{vote.displayName}</Code>
             </Flex>
           ))}
         </Flex>

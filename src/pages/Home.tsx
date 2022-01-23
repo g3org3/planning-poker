@@ -16,6 +16,7 @@ import { FC, useEffect, useCallback, memo } from 'react'
 import { useAuth } from 'config/auth'
 import { dbPush, dbSet } from 'config/firebase'
 import { useInput } from 'services/input'
+import { vs } from 'services/room'
 import { useGetUserDetails } from 'services/user'
 
 interface Props {
@@ -91,7 +92,11 @@ const Home: FC<Props> = (props) => {
             </Heading>
             <Input placeholder="Room's name" {...inputPropsName} />
             <Select placeholder="Voting system" {...inputPropsVS}>
-              <option value="fib">Fibonacci (0, 1, 2, 5, 8, 13, 21, ?)</option>
+              {Object.entries(vs).map(([name, val]) => (
+                <option key={name} value={name}>
+                  {name} ({val.join(', ')})
+                </option>
+              ))}
             </Select>
             <Button disabled={isDisabled} type="submit" colorScheme="blue">
               Create Room
@@ -120,7 +125,7 @@ const Home: FC<Props> = (props) => {
       {userDetails?.rooms && (
         <Flex direction="column" gap={6} minW="300px">
           <Heading as="h2" fontSize="2xl">
-            Rooms you joined
+            Latest room joined
           </Heading>
           <Select placeholder="pick a room" {...inputPropsJoined}>
             {userDetails.rooms.map((room) => (
