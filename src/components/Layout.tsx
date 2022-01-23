@@ -82,7 +82,7 @@ const Layout: React.FC<Props> = ({ homeUrl, children, title, by, menuItems, loca
                   </Link>
                 </MenuItem>
               ))}
-              {menuItems && <MenuDivider color={bg.divider} />}
+              {!!menuItems?.length && <MenuDivider color={bg.divider} />}
               <MenuItem onClick={onClickAuth} icon={<span>🔓</span>}>
                 {currentUser ? 'Log out' : 'Log in'}
               </MenuItem>

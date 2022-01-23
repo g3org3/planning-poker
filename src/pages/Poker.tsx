@@ -1,4 +1,5 @@
-import { Box, Button, Code, Flex, Heading, Text } from '@chakra-ui/react'
+import { DeleteIcon, ViewOffIcon, ViewIcon } from '@chakra-ui/icons'
+import { Box, Button, Code, Flex, Heading, Text, useColorModeValue } from '@chakra-ui/react'
 import { useNavigate, WindowLocation } from '@reach/router'
 import { Emoji } from 'emoji-mart'
 import { FC, useEffect } from 'react'
@@ -72,8 +73,13 @@ const Poker: FC<Props> = ({ roomId, location }) => {
   const dispatch = useDispatch()
   const { currentUser, initialLoading } = useAuth()
   const userDetails = useGetUserDetails(currentUser)
-  // const bg = { footer: useColorModeValue('teal.100', 'blue.600') }
+  const bgCenterBox = useColorModeValue('blue.200', 'blue.800')
   const room = useGetRoom(roomId)
+  const issue = room && room.issues && room.issues['AF1'] ? room.issues['AF1'] : null
+  const votesById = issue && issue.votes ? issue.votes : {}
+  const votes = issue && issue.votes ? Object.values(issue.votes) : []
+  const currentVote = votes && currentUser ? votesById[currentUser.uid] : null
+  const isHidden = issue?.isHidden
 
   useEffect(() => {
     if (room && currentUser) {
@@ -93,6 +99,8 @@ const Poker: FC<Props> = ({ roomId, location }) => {
 
   const onClickCard = (card: string) => () => {
     if (!room || !currentUser) return
+
+    if (!isHidden) return
 
     dbSet(`/poker/rooms/${room.id}/issues/AF1/votes/${currentUser.uid}`, 'id', currentUser.uid)
     dbSet(
@@ -134,27 +142,27 @@ const Poker: FC<Props> = ({ roomId, location }) => {
     }
   }, [userDetails, initialLoading, currentUser, navigate, location])
 
-  const issue = room && room.issues && room.issues['AF1'] ? room.issues['AF1'] : null
-  const votesById = issue && issue.votes ? issue.votes : {}
-  const votes = issue && issue.votes ? Object.values(issue.votes) : []
-  const currentVote = votes && currentUser ? votesById[currentUser.uid] : null
-  const isHidden = issue?.isHidden
-
   return (
     <Flex direction="column" height="calc(100vh - 88px)">
-      <Flex direction="column">
+      <Flex alignItems="center">
         <Heading gap={4}>
           <Emoji emoji={room?.emoji || ''} size={24} /> {room?.name}
         </Heading>
-      </Flex>
-      <Flex mt={4}>
-        <Button onClick={onClickReset} size="sm" variant="outline" colorScheme="red">
-          Reset
-        </Button>
+        <Flex flex={1} justifyContent="flex-end" alignItems="center">
+          <Button
+            disabled={!votes.length}
+            leftIcon={<DeleteIcon />}
+            onClick={onClickReset}
+            variant="ghost"
+            colorScheme="red"
+          >
+            Reset
+          </Button>
+        </Flex>
       </Flex>
       <Flex direction="column" alignItems="center" justifyContent="center" flex={1} gap={4}>
         <Flex
-          bg="blue.100"
+          bg={bgCenterBox}
           direction="column"
           color="blue.500"
           width={{ base: 'unset', md: '400px' }}
@@ -163,11 +171,17 @@ const Poker: FC<Props> = ({ roomId, location }) => {
           alignItems="center"
           justifyContent="center"
           borderRadius="20px"
+          boxShadow="md"
           fontSize={32}
           gap={4}
         >
           {votes.length === 0 ? 'Pick your cards!' : 'Ready?'}
-          <Button colorScheme="blue" onClick={onClickReveal}>
+          <Button
+            disabled={!votes.length}
+            leftIcon={isHidden ? <ViewIcon /> : <ViewOffIcon />}
+            colorScheme="blue"
+            onClick={onClickReveal}
+          >
             {isHidden ? 'Reveal' : 'Hide'} votes
           </Button>
         </Flex>
@@ -176,7 +190,9 @@ const Poker: FC<Props> = ({ roomId, location }) => {
           {votes.map((vote) => (
             <Flex key={vote.id} direction="column" alignItems="center" gap={2}>
               <Card points={vote.points} hidden={isHidden} />
-              <Code>{vote.displayName}</Code>
+              <Code p={1} pl={3} pr={3}>
+                {vote.displayName}
+              </Code>
             </Flex>
           ))}
         </Flex>
@@ -207,15 +223,14 @@ const Poker: FC<Props> = ({ roomId, location }) => {
       >
         {room?.users?.map((u, i) => (
           <Flex alignItems="center" key={u.id} gap={2}>
-            <pre>{u.displayName} </pre>
+            <pre>{u.displayName}</pre>
             <Box
               bg={u.connected ? 'green.300' : 'tomato'}
               display="inline-block"
               height={3}
               width={3}
               borderRadius="full"
-            />{' '}
-            {i + 1 === room?.users?.length ? '' : ', '}
+            />
           </Flex>
         ))}
       </Flex>
